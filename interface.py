@@ -3,7 +3,7 @@ import random, sys, pygame
 from pygame.locals import *
 from datetime import datetime
 
-###################### PARAMETERS ######################
+###################### PARAMETERS #
 NB_GAME = 1
 NB_CASE_C = 2
 NB_CASE_L = 2
