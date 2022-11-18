@@ -9,7 +9,8 @@ NB_CASE_C = 2
 NB_CASE_L = 2
 NB_BOAT = 1
 NB_FLASH = 1
-FLASHDELAY = 100
+FLASHDELAY = 50
+FreqAlea = True
 
 ###################### COLORS ######################
 # Definition of colors used
@@ -31,7 +32,7 @@ WINDOWWIDTH, WINDOWHEIGHT = DISPLAY.get_size()
 
 ###################### SETTING ######################
 def setting():
-    global NB_CASE_C, NB_CASE_L, NB_BOAT, NB_FLASH, FLASHDELAY, NB_GAME
+    global NB_CASE_C, NB_CASE_L, NB_BOAT, NB_FLASH, FLASHDELAY, NB_GAME, FreqAlea
     DISPLAY.fill((118, 145, 166))
     game_begin = FALSE
     # defining a font
@@ -47,22 +48,21 @@ def setting():
     p12 = title_font.render("4X4", True , WHITE)
     p13 = title_font.render("6x6", True , WHITE)
 
-    p2 = title_font.render("Nombres de bateaux:", True, WHITE)
+    p2 = title_font.render("Nombre de bateaux:", True, WHITE)
     p21 =  title_font.render("1", True , WHITE)
     p22 =  title_font.render("2", True , WHITE)
     p23 =  title_font.render("3", True , WHITE)
 
-    p3 = title_font.render("Nombre de clignotement:",True , WHITE)
+    p3 = title_font.render("Clignotements:",True , WHITE)
     p31 =  title_font.render("1", True , WHITE)
     p32 =  title_font.render("5", True , WHITE)
     p33 =  title_font.render("10", True , WHITE)
 
-    p4 = title_font.render("Fmax de clignotement:", True , WHITE)
-    p41 = title_font.render("100", True , WHITE)
-    p42 = title_font.render("200", True , WHITE)
-    p43 = title_font.render("300", True , WHITE)
+    p4 = title_font.render("Fréquences aléatoires :", True , WHITE)
+    p41 = title_font.render("Oui", True , WHITE)
+    p42 = title_font.render("Non", True , WHITE)
 
-    p5 = title_font.render("Nombre de test:", True , WHITE)
+    p5 = title_font.render("Nombre de tests:", True , WHITE)
     p51 = title_font.render("1", True , WHITE)
     p52 = title_font.render("5", True , WHITE)
     p53 = title_font.render("10", True , WHITE)
@@ -125,13 +125,10 @@ def setting():
                 if 4.55*WINDOWHEIGHT/10 - 10 <= mouse[1] <= 4.55*WINDOWHEIGHT/10 + 40:
                     if  WINDOWWIDTH/2 + 180 <= mouse[0] <= WINDOWWIDTH/2 + 280:
                         i4 = 0
-                        FLASHDELAY = 100
+                        FreqAlea = True
                     if  WINDOWWIDTH/2 + 180 + 150 <= mouse[0] <= WINDOWWIDTH/2 + 280 + 150:
                         i4 = 1
-                        FLASHDELAY = 200
-                    if WINDOWWIDTH/2 + 180 + 300 <= mouse[0] <= WINDOWWIDTH/2 + 280 + 300:
-                        i4 = 2
-                        FLASHDELAY = 300
+                        FreqAlea = False
                 
                 if 5.4*WINDOWHEIGHT/10 - 10 <= mouse[1] <= 5.4*WINDOWHEIGHT/10 + 40:
                     if  WINDOWWIDTH/2 + 180 <= mouse[0] <= WINDOWWIDTH/2 + 280:
@@ -181,11 +178,9 @@ def setting():
 
         pygame.draw.rect(DISPLAY,(208, 224, 227),[WINDOWWIDTH/2 + 180 , 4.55*WINDOWHEIGHT/10 - 10, 100,50])
         pygame.draw.rect(DISPLAY,(208, 224, 227),[WINDOWWIDTH/2 + 180 + 150, 4.55*WINDOWHEIGHT/10 - 10, 100,50])
-        pygame.draw.rect(DISPLAY,(208, 224, 227),[WINDOWWIDTH/2 + 180 + 2*150, 4.55*WINDOWHEIGHT/10 - 10, 100,50])
         pygame.draw.rect(DISPLAY,(24, 30, 102),[WINDOWWIDTH/2 + 180 + i4*150, 4.55*WINDOWHEIGHT/10 - 10, 100,50])
         DISPLAY.blit(p41 , (WINDOWWIDTH/2 + 200,4.55*WINDOWHEIGHT/10))
         DISPLAY.blit(p42 , (WINDOWWIDTH/2 + 350,4.55*WINDOWHEIGHT/10))
-        DISPLAY.blit(p43 , (WINDOWWIDTH/2 + 500,4.55*WINDOWHEIGHT/10))
 
         pygame.draw.rect(DISPLAY,(208, 224, 227),[WINDOWWIDTH/2 + 180 , 5.4*WINDOWHEIGHT/10 - 10, 100,50])
         pygame.draw.rect(DISPLAY,(208, 224, 227),[WINDOWWIDTH/2 + 180 + 150, 5.4*WINDOWHEIGHT/10 - 10, 100,50])
@@ -230,12 +225,19 @@ def im_boat():
 def flashdelay():
     global FLASHDELAY, FLASHDELAY_C, FLASHDELAY_L, ORDER_C, ORDER_L
     FLASHDELAY_C = {}
-    for j in range (NB_CASE_C):
-        FLASHDELAY_C[j] = random.randint(10, FLASHDELAY)
-
     FLASHDELAY_L = {}
-    for j in range (NB_CASE_L):
-        FLASHDELAY_L[j] =random.randint(10, FLASHDELAY)
+
+    if FreqAlea == False:
+        for j in range (NB_CASE_C):
+            FLASHDELAY_C[j] = int((1/13)*1000)
+        for i in range (NB_CASE_L):
+            FLASHDELAY_L[i] = int((1/18)*1000)
+    else:
+        for j in range (NB_CASE_C):
+            FLASHDELAY_C[j] = random.randint((1/FLASHDELAY)*1000, (1/10)*1000)
+
+        for j in range (NB_CASE_L):
+            FLASHDELAY_L[j] =random.randint((1/FLASHDELAY)*1000, (1/10)*1000)
 
     # Order of the flash by columns
     ORDER_C = [i for i in range(NB_CASE_C)]
@@ -257,6 +259,7 @@ def flashColonne(j):
         pygame.display.update()
         checkForQuit()
         pygame.time.wait(FLASHDELAY_C[j])
+        pygame.time.wait(1000)
 
 def flashLigne(i):
      for n in range(NB_FLASH):
@@ -271,6 +274,7 @@ def flashLigne(i):
         pygame.display.update()
         checkForQuit()
         pygame.time.wait(FLASHDELAY_L[i])
+        pygame.time.wait(1000)
 
 ###################### BOATS ######################
 # Placing the boat in the grid
@@ -335,9 +339,7 @@ def selected(l, c):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
                     boucle = False
-                    key_list = [k  for (k, val) in TAB_B.items() if val == 9]
-
-                    if (l,c) in key_list:
+                    if l == boat_s[0] and c ==boat_s[1]:
                         check_answer(True)
                     else:
                         check_answer(False)
@@ -411,11 +413,11 @@ def write_Test(i):
     for i in range(len(ORDER_C)):
         file.write(str(ORDER_C[i]) +"  ")
 
-    file.write("\n Flash delay of lines (ms): ")
+    file.write("\n Flash delay of lines (ms): \n")
     for i in range(len(FLASHDELAY_L)):
         file.write("                            Line "+str(i) + ": " + str(FLASHDELAY_L[i]) +"\n")
     
-    file.write("Flash order of lines: \n")
+    file.write("Flash order of lines: ")
     for i in range(len(ORDER_C)):
         file.write(str(ORDER_C[i]) +"  ")
     
@@ -426,7 +428,7 @@ def write_Test(i):
 
     file.write("\nIndex of the boat to select: (" + str(boat_s[0]) +","+ str(boat_s[1]) +")\n")
 
-    file.write("Index selected: (" + str(C_SELECTED)+ "; "+str(L_SELECTED) +")\n")
+    file.write("Index selected: (" + str(L_SELECTED)+ "; "+str(C_SELECTED) +")\n")
     file.close()
 
 ###################### MAIN ######################

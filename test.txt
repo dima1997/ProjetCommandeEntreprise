@@ -1,0 +1,8 @@
+DATE: 2022-11-18 16:04:21.311939
+ 
+###################### SETTINGS ###################### 
+Number of test : 1
+Size: 4x4
+Number of boats: 1
+Number of flash: 1
+NB_GAME: 1
