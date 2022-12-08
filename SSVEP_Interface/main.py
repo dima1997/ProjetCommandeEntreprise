@@ -5,7 +5,6 @@ from config import *
 pygame.init()
  
 FramePerSec = pygame.time.Clock()
-
 infoObject = pygame.display.Info()
 DISPLAYSURF = pygame.display.set_mode(
     (infoObject.current_w, infoObject.current_h), 
@@ -70,6 +69,6 @@ def main():
             box.draw(DISPLAYSURF)
                 
         pygame.display.update()
-        FramePerSec.tick(FPS)
+        FramePerSec.tick()
 
 main()
