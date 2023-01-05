@@ -2,16 +2,6 @@ import pygame, sys
 from pygame.locals import *
 from config import *
  
-pygame.init()
- 
-FramePerSec = pygame.time.Clock()
-infoObject = pygame.display.Info()
-DISPLAYSURF = pygame.display.set_mode(
-    (infoObject.current_w, infoObject.current_h), 
-    pygame.RESIZABLE)
-DISPLAYSURF.fill(BLACK)
-pygame.display.set_caption("SSVEP Stimulation")
-
 class Box:
     def __init__(self, color, x_fraction, y_fraction, side_fraction, frequency, current_time):
         self.color = color
@@ -43,6 +33,16 @@ class Box:
         pygame.draw.rect(surface, self.color, pygame.Rect(x, y, w, z))
 
 def main():
+    pygame.init()
+	 
+    # FramePerSec = pygame.time.Clock()
+    infoObject = pygame.display.Info()
+    DISPLAYSURF = pygame.display.set_mode(
+       (infoObject.current_w, infoObject.current_h), 
+       pygame.RESIZABLE)
+    DISPLAYSURF.fill(BLACK)
+    pygame.display.set_caption("SSVEP Stimulation")
+
     current_time = pygame.time.get_ticks()
     boxes = []
     for box_data in BOXES:
@@ -69,6 +69,6 @@ def main():
             box.draw(DISPLAYSURF)
                 
         pygame.display.update()
-        FramePerSec.tick()
+        #FramePerSec.tick()
 
 main()
